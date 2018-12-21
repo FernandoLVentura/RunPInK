@@ -7,7 +7,7 @@ import struct
 # Important variables
 numProto = 91               # Number of prototypes in the SOM
 numOutliers = 3             # Number of outlier indices to display
-mapF = "stampmap150k.bin"   # Mapping file
+mapF = "stampmap150k.bin"   # Mapping file. Must be in this directory.
 
 # Find the indices of the least fitting images
 
