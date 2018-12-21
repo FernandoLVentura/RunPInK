@@ -18,13 +18,13 @@ Run Philatelist.py (the stamp a collector). This should place individual cutouts
 
 In the Output directory, run PINK on the stamps file using the command:
 
-  Pink --cuda-off True --seed 42 --dist-func gaussian 0.8 0.05 --inter-store overwrite --neuron-dimension 64 --numrot 360 --num-iter 10 --progress 0.01 --som-width 11 --som-height 11 --layout hexagonal --train stamps.bin result.bin
+    Pink --cuda-off True --seed 42 --dist-func gaussian 0.8 0.05 --inter-store overwrite --neuron-dimension 64 --numrot 360 --num-iter 10 --progress 0.01 --som-width 11 --som-height 11 --layout hexagonal --train stamps.bin result.bin
 
 This creates the hexagonal SOM, 11x11, stored in binary format in the file "result.bin." It uses 360 rotations and 10 iterations. Increase iterations for a better SOM, but increased processing time.
 
 The images may now be mapped onto the SOM by PINK using the command:
 
-  Pink --seed 42 --inter-store overwrite --dist-func gaussian 0.8 0.05 --neuron-dimension 64 --numrot 360 --num-iter 10 --progress 0.01 --som-width 11 --som-height 11 --layout hexagonal --map stamps.bin stampmap150k.bin result.bin 
+    Pink --seed 42 --inter-store overwrite --dist-func gaussian 0.8 0.05 --neuron-dimension 64 --numrot 360 --num-iter 10 --progress 0.01 --som-width 11 --som-height 11 --layout hexagonal --map stamps.bin stampmap150k.bin result.bin 
 
 This maps the images in stamps.bin onto the SOM in result.bin, storing the mapping in stampmap150k.bin.
 The mapped images may now be processed.
