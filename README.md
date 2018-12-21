@@ -31,5 +31,5 @@ The mapped images may now be processed.
 
 Ensure that all variables are set correctly and run mapDataToSOM.py. This will generate the heatmaps and store the means and standard deviations in CSV format.
 
-The SOM and heatmaps may now be visualised using the scripts in visualiseResults. These script to visualise the SOM came with PINK and has not been modified. The script to visualise the heatmaps consists of the same script to view the SOM, marginally modified to handle RGBa data instead of monochrome images. displayMaps.py contains functions that allow for easy use of these other scripts.
+The SOM and heatmaps may now be visualised using the scripts in visualiseResults. These script to visualise the SOM came with PINK and has not been modified. The script to visualise the heatmaps consists of the same script to view the SOM, marginally modified to handle RGBa data instead of monochrome images. displayMaps.py contains functions that allow for easy use of these heatmapVisualiser.py including a function to view all heatmaps in a directory in a row.
 
