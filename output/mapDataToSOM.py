@@ -15,10 +15,10 @@ from makeHMAP import *
 imageSize = 128                             # Square image sidelength (pixels)
 stampDimensions = [imageSize, imageSize]
 
-mapping_file = 'stampmap150k.bin'           # Mapping file created by PINK
-imageCat = 'stampCat2.csv'                  # Catalogue created by stamp collector
+mapping_file = 'stampmap150k.bin'           # Path to Mapping file created by PINK.
+imageCat = 'stampCat2.csv'                  # Path to Catalogue created by stamp collector
 
-                                            # VAC containing stellar mass and other properties.
+                                            # Path to VAC containing stellar mass and other properties.
 smassCat = 'portsmouth_stellarmass_passive_krou-DR12.fits'
 
 numPrototypes = 91                          # Number of prototypes in SOM
