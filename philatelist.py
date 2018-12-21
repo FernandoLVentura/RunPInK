@@ -38,18 +38,18 @@ import csv
 #   ___________________
 #
 
-minPeak = 0.75                                      #Exclude lower peaks
-maxPeak = 10000                                     #Exclude higher peaks
+minPeak = 0.0                                       #Exclude lower peaks
+maxPeak = 1000000                                   #Exclude higher peaks
 clip_threshold = 3.0                                # No. times signal must exc. std. dev. for admission.
 
-binFile = 'output/stamps.bin'                       #Binary filename
+binFile = 'output2/stamps2.bin'                     #Binary filename
 catFile = 'catalog_13jun05.bin'                     #File location of catalogue
 FIRST_dirs = '/data/users/deane/vla_first/data/'    #File location of FIRST directories
 album = 'stamps/'                                   #File location of stamps
-resultingCat = 'output/stampCat.csv'                #Catalogue of training sources
-errList = 'output/files_with_problems.txt'
+resultingCat = 'output2/stampCat.csv'               #Catalogue of training sources
+errList = 'output2/files_with_problems.txt'         #List of corrupt files
 
-numStamps = 50000                                   #Maximum number of training stamps allowed
+numStamps = 150000                                  #Maximum number of training stamps allowed
 stampSize = 128                                     #Size of the stamp in pixels
 
 
@@ -85,6 +85,8 @@ DECdeg = np.array(DECdeg)
 #Get initial list of possible filenames
 print('Getting initial list of possible associated filenames...')
 
+#The below process should be handled more elegantly, as above.
+#Might rewrite this.
 filenames = []
 f = open(catFile,'r')
 for line in f:
@@ -100,6 +102,12 @@ filenames_subset = [filenames[i] for i in ind]
 subcat = np.array([RAdeg[ind],DECdeg[ind],Fpeak[ind],ind])
 RAdeg = RAdeg[ind]
 DECdeg = DECdeg[ind]
+
+#Remove the below after testing
+#print('\nREQUIRED FILES:\n')
+#for fn in range(len(filenames_subset)):
+#    print(filenames_subset[fn])
+#print('\nEND OF FILES\n')
 
 print('Ready to collect files...')
 
@@ -122,7 +130,7 @@ haveFile = 0
 altFile = 0
 noFile = 0
 
-numFilesWithBuffer = 1.2*numStamps # Do this to account for corrupt files.
+numFilesWithBuffer = 1.2*numStamps
 
 for obj in range(len(ind)):
 
@@ -213,7 +221,6 @@ for i in range(len(files_on_hand)):
         fileData = fits.open(files_on_hand[i])
         hdr = fileData[0].header
     
-	# These files have a third and fourth axis which must be removed for processing
         hdr.remove('CRPIX3')
         hdr.remove('CRVAL3')
         hdr.remove('CDELT3')
@@ -235,15 +242,11 @@ for i in range(len(files_on_hand)):
         x, y = w.all_world2pix(ra, dec, 1, adaptive=True) #Pixel coordinates of target
         
         position = (x, y)
-        imData = fileData[0].data[0][0] #Shape it correctly. Assumes 4D data.
+        imData = fileData[0].data[0][0] #Shape it correctly. Assumes 4D. Might rewrite to generalise.
         cutout = Cutout2D(imData, position, size, mode='partial') #Anything past the border filled with NaN
         
         image = np.array(cutout.data) #Get the image data as a np array.
         
-	#
-	# Following taken from sample script:
-	# ///////////////////////////////////
-	
         empty = np.isnan(image) #Get all NaN pixels and replace with normalised noise.
         image[empty] = np.random.normal(loc=np.mean(image[~empty]), scale=np.std(image[~empty]), size=image.shape)[empty] # replace missing values with noise  
         image = image - np.min(image) #Set base intensity to 0
@@ -257,11 +260,7 @@ for i in range(len(files_on_hand)):
         
         image.astype('f').tofile(output) #Write to the Binary file
         
-	#
-	# \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-	#
-	
-        # Append the info to our catalogue
+        #Append the info to our catalogue
         entry = []
         entry.append(str(ra))
         entry.append(str(dec))
@@ -270,13 +269,12 @@ for i in range(len(files_on_hand)):
         entry.append(file)
         info.append(entry)
         
-        # Create a FITS image of the stamp
+        #Create a FITS image of the stamp
         hdu = fits.PrimaryHDU()
         hdu.data = image
         hdu.header['CRVAL1'] = ra
         hdu.header['CRVAL2'] = dec
         
-	# Save the stamp for later reference
         hdu.writeto(file, clobber=True)
         
         count += 1
