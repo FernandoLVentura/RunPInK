@@ -29,4 +29,7 @@ Pink --seed 42 --inter-store overwrite --dist-func gaussian 0.8 0.05 --neuron-di
 This maps the images in stamps.bin onto the SOM in result.bin, storing the mapping in stampmap150k.bin.
 The mapped images may now be processed.
 
-Ensure that all variables are set correctly 
+Ensure that all variables are set correctly and run mapDataToSOM.py. This will generate the heatmaps and store the means and standard deviations in CSV format.
+
+The SOM and heatmaps may now be visualised using the scripts in visualiseResults. These script to visualise the SOM came with PINK and has not been modified. The script to visualise the heatmaps consists of the same script to view the SOM, marginally modified to handle RGBa data instead of monochrome images. displayMaps.py contains functions that allow for easy use of these other scripts.
+
